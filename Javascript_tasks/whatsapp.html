@@ -1,0 +1,10 @@
+<script>
+    function sendWhatsAppMessage() {
+      const phone = "919999999999"; // Format: countrycode + number
+      const text = encodeURIComponent("Hello! This is an auto-generated message.");
+      const url = `https://wa.me/${phone}?text=${text}`;
+      window.open(url, "_blank");
+    }
+    </script>
+    <button onclick="sendWhatsAppMessage()">Send WhatsApp</button>
+    

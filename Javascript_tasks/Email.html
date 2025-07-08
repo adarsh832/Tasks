@@ -1,0 +1,17 @@
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+emailjs.init("YOUR_USER_ID");
+
+function sendEmailWithPhoto(imageDataUrl) {
+  const templateParams = {
+    to_name: 'Your Name',
+    from_name: 'Webcam Bot',
+    message: 'Captured photo attached below',
+    photo: imageDataUrl
+  };
+
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+    .then(() => alert('Email sent successfully!'))
+    .catch(err => console.error('EmailJS Error:', err));
+}
+</script>

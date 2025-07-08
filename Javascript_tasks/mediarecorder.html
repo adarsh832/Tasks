@@ -1,0 +1,40 @@
+<video id="recordPreview" autoplay muted></video>
+<button onclick="startRecording()">Start</button>
+<button onclick="stopRecording()">Stop</button>
+
+<script>
+let mediaRecorder, recordedChunks = [];
+
+async function startRecording() {
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  document.getElementById('recordPreview').srcObject = stream;
+  mediaRecorder = new MediaRecorder(stream);
+  recordedChunks = [];
+
+  mediaRecorder.ondataavailable = e => recordedChunks.push(e.data);
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    sendVideoBlobViaEmail(blob);
+  };
+
+  mediaRecorder.start();
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
+}
+
+function sendVideoBlobViaEmail(blob) {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const base64Data = reader.result;
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_VIDEO_TEMPLATE_ID", {
+      message: "Here is the recorded video",
+      video: base64Data
+    })
+    .then(() => alert("Video emailed successfully!"))
+    .catch(err => console.error("Video email error:", err));
+  };
+  reader.readAsDataURL(blob);
+}
+</script>
